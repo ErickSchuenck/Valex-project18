@@ -5,19 +5,22 @@ import {
   createCreditCard 
 } from "../controllers/creationController.js";
 import {
-  checkIfCardTypeIsValid, 
-  checkForApiExistance, 
-  checkForWorkerExistance
+  validateSchema, 
+  checkForApiKeyExistance, 
+  checkForWorkerExistance,
+  checkForWorkerCardUniqueness
 } from "../middlewares/registerCardMiddleware.js"
+import { cardSchema } from "../schemas/schemas.js";
 
 
 const creationRouter = Router();
 
 creationRouter.post(
   "/createCreditCard", 
-  checkIfCardTypeIsValid, 
-  checkForApiExistance, 
+  validateSchema(cardSchema), 
+  checkForApiKeyExistance, 
   checkForWorkerExistance, 
+  checkForWorkerCardUniqueness,
   createCreditCard
   );
 

@@ -1,41 +1,58 @@
-import {connection} from '../config/database.js'
+import chalk from 'chalk';
 import { Request, Response, NextFunction } from "express";
 import {cardSchema} from '../schemas/schemas.js'
 import {findByApiKey } from '../repositories/companyRepository.js'
 import {findById} from '../repositories/employeeRepository.js'
+import { findByTypeAndEmployeeId, TransactionTypes } from '../repositories/cardRepository.js';
 
-export async function checkIfCardTypeIsValid(req : Request, res : Response, next : NextFunction ){
-  const { error } = cardSchema.validate(req.body)
-  if (error) {
-    throw { 
-      type: "unprocessable_entity", 
-      message: error.details[0].message 
+
+
+export function validateSchema(schema: any) {
+    return (req: Request, res: Response, next: NextFunction) => { 
+      const {error} = schema.validate(req.body, {abortEarly: false});
+      if (error) {
+        return res.status(422).send(error.details.map(detail => detail.message));
+      }
+      next();
     }
-  }
-  next()
-}
+};
 
-export async function checkForApiExistance(req : Request, res : Response, next : NextFunction ){
+export async function checkForApiKeyExistance(req : Request, res : Response, next : NextFunction ){
+  console.log(chalk.blue(2))
   const key : string = req.headers["x-api-key"].toString();
-  const verification = await findByApiKey(key)
-  if (!verification){ 
-    console.log('Api key not found in database')
+  console.log(chalk.red(key))
+  const verification = await findByApiKey(key);
+  console.log(chalk.red(verification))
+  if (!verification){
     throw { 
-      type: "unprocessable_entity", 
-      message: "invalid api key" 
+      type: "not_found", 
+      message: "Api key not found in database" 
     }
   }
   next()
 }
 
 export async function checkForWorkerExistance(req : Request, res : Response, next : NextFunction ){
-  const { workerIdentifier } : { workerIdentifier: number} = req.body;
-  const verification = await findById(workerIdentifier)
-  if (!verification){ 
-    console.log('Worker not found in database')
+  console.log(chalk.blue(3))
+  const { employeeId } : { employeeId: number} = req.body;
+  const verification = await findById(employeeId)
+  if (!verification){
     throw { 
       type: "unprocessable_entity", 
       message: "Worker not found in database" 
+    }
+  }
+  next()
+}
+
+export async function checkForWorkerCardUniqueness(req : Request, res : Response, next : NextFunction ){
+  console.log(chalk.blue(req.body))
+  const { employeeId, cardType } : { employeeId: number; cardType : TransactionTypes} = req.body;
+  const result = await findByTypeAndEmployeeId(cardType, employeeId)
+  if (result) {
+    throw { 
+      type: "card_redundancy", 
+      message: "This card is already registered" 
     }
   }
   next()
