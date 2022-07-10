@@ -1,18 +1,13 @@
 import { Request, Response } from "express";
+import { TransactionTypes, insert } from "../repositories/cardRepository.js";
+import chalk from "chalk";
 import * as cardsServices from "../services/cardServices.js"
 
 export async function createCreditCard(req: Request, res: Response) {
-  try {
-    const {workerIdentifier, cardType} : {
-      workerIdentifier: number, 
-      cardType: 'groceries' | 'restaurants' | 'transport' | 'education'| 'health';
-    } = req.body;
-
-    console.log(workerIdentifier, cardType)
-    await cardsServices.register(workerIdentifier, cardType)
-    res.sendStatus(201)
-
-  } catch (error) {
-    res.send(error)
-  }
+  const {employeeId, cardType} : {
+    employeeId: number, 
+    cardType: TransactionTypes
+  } = req.body;
+ await cardsServices.createCard(employeeId, cardType);
+ res.sendStatus(201);
 }
