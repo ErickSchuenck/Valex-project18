@@ -27,7 +27,9 @@
   },
   "type": "module",
   "scripts": {
-    "dev": "nodemon src/index.ts"
+    "dev": "nodemon src/index.ts",
+    "build": "tsc",
+    "start": "node dist/src/index.js"
   },
   "author": "erick schuenck",
   "license": "ISC"
