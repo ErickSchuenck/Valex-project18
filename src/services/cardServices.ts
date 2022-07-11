@@ -4,6 +4,8 @@ import * as cardRepository from "../repositories/cardRepository.js"
 import * as employeeRepository from "../repositories/employeeRepository.js"
 import Cryptr from "cryptr"
 import dayjs from "dayjs";
+import * as cardUtils from "../utils/cardUtils.js"
+import bcrypt from "bcrypt"
 
 const cryptr = new Cryptr(process.env.SECRET);
 
@@ -59,4 +61,28 @@ async function abbreviateName(employeeId : number){
 function generateSecurityCode(){
   const cvc = faker.finance.creditCardCVV();
   return cryptr.encrypt(cvc);
+}
+
+export async function activateCard(id : number, securityCode : string, password : string){
+  const card = await cardRepository.findById(id)
+  if (!card.isBlocked) {
+    throw {
+      type: 'Invalid requisition', 
+      message: 'This card is already activated'
+    }
+  }
+  await cardUtils.checkForCardExpirationDate(card.expirationDate);
+  await checkForCardCVC(card.securityCode, securityCode);
+  const encryptedPassword = bcrypt.hashSync(password, 10);
+  await cardRepository.update(id, {password: encryptedPassword, isBlocked: false})
+}
+
+async function checkForCardCVC(inputCVC :string, databaseCVC: string){
+  const encriptedInputCVC = cryptr.decrypt(inputCVC);
+  if (encriptedInputCVC !== databaseCVC) {
+    throw {
+      type: 'Invalid requisition',
+      message: 'CVC does not match with database, please double check the input'
+    }
+  }
 }

@@ -6,18 +6,7 @@ export const cardSchema = joi.object({
 })
 
 export const activationSchema = joi.object({
-  number: joi.string().required(),
-  securityCode: joi.string().required().length(3).pattern(/^[0-9]+$/),
-  password: joi.string().required().min(3).pattern(/^[0-9]+$/),
-  cardholderName: joi.string().required(),
-  expirationDate: joi.string().required()
+  cardId: joi.number().required(),
+  securityCode: joi.string().pattern(/[0-9]$/).length(3).required(),
+  password: joi.string().pattern(/[0-9]$/).length(4).required()
 })
-
-
-// {
-//     "number":"12345 12345 12345 12345",
-//     "securityCode": "123",
-    
-//     "cardholderName": "FULANO S DRIVEN",
-//     "expirationDate": "07/2017"
-// }

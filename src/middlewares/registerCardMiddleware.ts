@@ -52,15 +52,3 @@ export async function checkForWorkerCardUniqueness(employeeId : number, cardType
     }
   }
 }
-
-
-
-export async function checkForCardExistance(employeeId : number, cardType : TransactionTypes){
-  const result = await findByTypeAndEmployeeId(cardType, employeeId)
-  // if (result.length !== 1) {
-  //   throw { 
-  //     type: "Not Found!", 
-  //     message: "This is not registered" 
-  //   }
-  // }
-}
