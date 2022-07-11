@@ -32,9 +32,8 @@ export async function checkForApiKeyExistance(req : Request, res : Response, nex
   next()
 }
 
-export async function checkForWorkerExistance(req : Request, res : Response, next : NextFunction ){
+export async function checkForWorkerExistance(employeeId : number){
   console.log(chalk.blue(3))
-  const { employeeId } : { employeeId: number} = req.body;
   const verification = await findById(employeeId)
   if (!verification){
     throw { 
@@ -42,12 +41,9 @@ export async function checkForWorkerExistance(req : Request, res : Response, nex
       message: "Worker not found in database" 
     }
   }
-  next()
 }
 
-export async function checkForWorkerCardUniqueness(req : Request, res : Response, next : NextFunction ){
-  console.log(chalk.blue(req.body))
-  const { employeeId, cardType } : { employeeId: number; cardType : TransactionTypes} = req.body;
+export async function checkForWorkerCardUniqueness(employeeId : number, cardType : TransactionTypes){
   const result = await findByTypeAndEmployeeId(cardType, employeeId)
   if (result) {
     throw { 
@@ -55,5 +51,16 @@ export async function checkForWorkerCardUniqueness(req : Request, res : Response
       message: "This card is already registered" 
     }
   }
-  next()
+}
+
+
+
+export async function checkForCardExistance(employeeId : number, cardType : TransactionTypes){
+  const result = await findByTypeAndEmployeeId(cardType, employeeId)
+  // if (result.length !== 1) {
+  //   throw { 
+  //     type: "Not Found!", 
+  //     message: "This is not registered" 
+  //   }
+  // }
 }

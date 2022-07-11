@@ -6,9 +6,7 @@ import {
 } from "../controllers/creationController.js";
 import {
   validateSchema, 
-  checkForApiKeyExistance, 
-  checkForWorkerExistance,
-  checkForWorkerCardUniqueness
+  checkForApiKeyExistance,
 } from "../middlewares/registerCardMiddleware.js"
 import { cardSchema } from "../schemas/schemas.js";
 
@@ -19,8 +17,6 @@ creationRouter.post(
   "/createCreditCard", 
   validateSchema(cardSchema), 
   checkForApiKeyExistance, 
-  checkForWorkerExistance, 
-  checkForWorkerCardUniqueness,
   createCreditCard
   );
 
