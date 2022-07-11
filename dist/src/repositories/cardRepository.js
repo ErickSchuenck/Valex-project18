@@ -43,7 +43,7 @@ var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
     }
     return to.concat(ar || Array.prototype.slice.call(from));
 };
-import { connection } from "../../database.js";
+import { connection } from "../config/database.js";
 import { mapObjectToUpdateQuery } from "../../utils/sqlUtils.js";
 export function find() {
     return __awaiter(this, void 0, void 0, function () {
