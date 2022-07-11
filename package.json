@@ -11,14 +11,15 @@
     "express-async-errors": "^3.1.1",
     "joi": "^17.6.0",
     "pg": "^8.7.3",
-    "ts-node-dev": "^2.0.0"
+    "ts-node-dev": "^2.0.0",
+    "@faker-js/faker": "^7.3.0"
   },
   "name": "valex",
   "version": "1.0.0",
   "description": "credit card app",
   "main": "index.js",
   "devDependencies": {
-    "@faker-js/faker": "^7.3.0",
+    
     "@types/cors": "^2.8.12",
     "@types/cryptr": "^4.0.1",
     "@types/express": "^4.17.13",
