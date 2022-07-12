@@ -1,5 +1,5 @@
 import { Router } from "express";
-import {validateSchema} from "../middlewares/cardMiddleware.js"
+import {validateSchema} from "../middlewares/registerCardMiddleware.js"
 import { verificationSchema } from "../schemas/schemas.js";
 import { blockCard, unblockCard } from "../controllers/activationController";
 

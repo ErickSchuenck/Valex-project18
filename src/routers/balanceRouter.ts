@@ -1,5 +1,5 @@
 import { Router } from "express";
-import {checkForApiKeyExistance, validateSchema} from "../middlewares/cardMiddleware.js"
+import {checkForApiKeyExistance, validateSchema} from "../middlewares/registerCardMiddleware.js"
 import { verificationSchema, rechargeSchema, paymentSchema } from "../schemas/schemas.js";
 import { getCardBalance, rechargeCard, registerPayment } from "../controllers/balanceController.js";
 
