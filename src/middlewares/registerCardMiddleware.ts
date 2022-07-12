@@ -29,7 +29,6 @@ export async function checkForApiKeyExistance(req : Request, res : Response, nex
 }
 
 export async function checkForWorkerExistance(employeeId : number){
-  console.log(chalk.blue(3))
   const verification = await findById(employeeId)
   if (!verification){
     throw { 

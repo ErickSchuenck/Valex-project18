@@ -34,7 +34,6 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-import chalk from 'chalk';
 import { findByApiKey } from '../repositories/companyRepository.js';
 import { findById } from '../repositories/employeeRepository.js';
 import { findByTypeAndEmployeeId } from '../repositories/cardRepository.js';
@@ -75,9 +74,7 @@ export function checkForWorkerExistance(employeeId) {
         var verification;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0:
-                    console.log(chalk.blue(3));
-                    return [4 /*yield*/, findById(employeeId)];
+                case 0: return [4 /*yield*/, findById(employeeId)];
                 case 1:
                     verification = _a.sent();
                     if (!verification) {

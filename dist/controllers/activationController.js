@@ -34,7 +34,6 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-import chalk from "chalk";
 import * as cardsServices from "../services/cardServices.js";
 import { checkForCardExistance, checkForCardExpirationDate, checkForPasswordMatch, checkIfCardIsBlocked } from "../utils/cardUtils.js";
 import bcrypt from "bcrypt";
@@ -48,7 +47,6 @@ export function activateCard(req, res) {
                     return [4 /*yield*/, cardsServices.activateCard(id, securityCode, password)];
                 case 1:
                     _b.sent();
-                    console.log(chalk.red('Card Activated!'));
                     res.sendStatus(200);
                     return [2 /*return*/];
             }

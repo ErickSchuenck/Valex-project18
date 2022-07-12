@@ -35,15 +35,12 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 import { connection } from "../config/database.js";
-import chalk from "chalk";
 export function findByApiKey(apiKey) {
     return __awaiter(this, void 0, void 0, function () {
         var result;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0:
-                    console.log(chalk.red('entrou'));
-                    return [4 /*yield*/, connection.query("SELECT * FROM companies WHERE \"apiKey\"=$1", [apiKey])];
+                case 0: return [4 /*yield*/, connection.query("SELECT * FROM companies WHERE \"apiKey\"=$1", [apiKey])];
                 case 1:
                     result = _a.sent();
                     return [2 /*return*/, result.rows[0]];
