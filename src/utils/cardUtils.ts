@@ -21,3 +21,13 @@ export async function checkForCardExpirationDate(expirationDate: string){
       }
     }
 }
+
+export async function checkForPasswordMatch(id : number, encryptedPassword : string) {
+  const passwordInDatabase = (await cardRepository.findById(id)).password;
+  if (encryptedPassword !== passwordInDatabase){
+    throw {
+      type: "invalid requisition", 
+      message: "password incorrect, please double check the input"
+    }
+  }
+}
