@@ -75,15 +75,41 @@ Body
     "password":"1234"
 }
 
+
+
+
+
 :::::::::Para recarregar um cartão:::::::::
 enviar req POST para
 /recharge
+
+necessário headers.
+Exemplo de Headers:
+
+x-api-key
+zadKLNx.DzvOVjQH01TumGl2urPjPQSxUbf67vs0
 
 Exemplo de envio:
 
 Body
 {
     "id": 1,
-    "timestamp":,
+    "amount": 300,
+}
+
+
+
+
+:::::::::Para registrar um gasto:::::::::
+enviar req POST para
+/payment
+
+Exemplo de envio:
+
+Body
+{
+    "id": 1,
+    "password":"1234",
+    "businessId":1
     "amount": 300,
 }

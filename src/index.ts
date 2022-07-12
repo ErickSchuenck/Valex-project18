@@ -4,7 +4,6 @@ import "express-async-errors";
 import errorHandler from "./middlewares/errorHandlerMiddleware.js";
 import router from "./routers/index.js";
 import dotenv from "dotenv";
-import dayjs from "dayjs";
 
 dotenv.config();
 

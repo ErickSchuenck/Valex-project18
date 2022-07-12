@@ -6,8 +6,9 @@ import * as paymentRepository from "../repositories/paymentRepository.js"
 import Cryptr from "cryptr"
 import dayjs from "dayjs";
 import * as cardUtils from "../utils/cardUtils.js"
-import * as rechargeRepositoriy from "../repositories/rechargeRepository"
+import * as rechargeRepository from "../repositories/rechargeRepository.js"
 import bcrypt from "bcrypt"
+import * as businessRepository from "../repositories/businessRepository.js"
 
 const cryptr = new Cryptr(process.env.SECRET);
 
@@ -92,8 +93,8 @@ async function checkForCardCVC(inputCVC :string, databaseCVC: string){
 export async function getCardBalance(id : number, password : string){
   await cardUtils.checkForCardExistance(id);
   const transactions = await paymentRepository.findByCardId(id);
-  const recharges = await rechargeRepositoriy.findByCardId(id)
-  const balance = await generateBalance(transactions, recharges)
+  const recharges = await rechargeRepository.findByCardId(id)
+  const balance = generateBalance(transactions, recharges)
   return {balance, transactions, recharges}
 }
 
@@ -121,4 +122,71 @@ export async function blockOrUnblockCard(id: number, action: 'block' | 'unblock'
   if (action === 'unblock'){
     await cardRepository.update(id, { isBlocked: false});
   }
+}
+
+export async function rechargeCard(id : number, amount : number) {
+  const card = await cardUtils.checkForCardExistance(id);
+  const cardIsBlocked = await cardUtils.checkIfCardIsBlocked(card)
+  if (cardIsBlocked === true){
+    throw {
+      type: 'Invalid requisition',
+      message: 'This card is blocked'
+    }
+  }
+  await cardUtils.checkForCardExpirationDate(card.expirationDate)
+  await rechargeRepository.insert( id, amount );
+}
+
+export async function registerPayment(id : number, password : string, businessId : number, amount : number) {
+  const card = await cardUtils.checkForCardExistance(id);
+  const cardIsBlocked = await cardUtils.checkIfCardIsBlocked(card);
+  const encryptedPassword = bcrypt.hashSync(password, 10);
+  if (cardIsBlocked === true){
+    throw {
+      type: 'Invalid requisition',
+      message: 'This card is blocked'
+    }
+  }
+  await cardUtils.checkForCardExpirationDate(card.expirationDate);
+  await cardUtils.checkForPasswordMatch(id, encryptedPassword);
+  const business = await checkIfBusinessExists(businessId);
+  await checkIfBusinessTypeMatches(business.type, card.type);
+  await verifyIfCreditIsValid(id, amount);
+  paymentRepository.insert(id, businessId, amount);
+}
+
+async function checkIfBusinessExists(businessId : number) {
+  const business = await businessRepository.findById(businessId);
+    if(!business){
+        throw {
+          type: "Invalid requisition",
+          message: "This business does not exists" 
+        }
+    }
+  return business
+}
+
+async function checkIfBusinessTypeMatches(businessType : TransactionTypes, cardType : TransactionTypes) {
+  if (businessType !== cardType){
+    throw { 
+      type: "conflict", 
+      message: "this company type differs from your card type" 
+    }
+  }
+}
+
+async function verifyIfCreditIsValid(id : number, amount : number) {
+  const transactions = await paymentRepository.findByCardId(id);
+  const recharges = await rechargeRepository.findByCardId(id);
+  const balance = generateBalance(transactions, recharges);
+  checkIfBalanceCoversAmount(amount, balance)
+}
+
+function checkIfBalanceCoversAmount(amount: number, balance : number){
+    if(amount > balance){
+      throw {
+        type: "unauthorized", 
+        message: "this card does not have enough credits to perform this transaction" 
+      }
+    }
 }
