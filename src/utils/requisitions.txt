@@ -32,7 +32,7 @@ Body
 
 
 
-:::::::::Para ativar um cartão:::::::::
+:::::::::Para ver as transações:::::::::
 
 enviar req GET para
 /balance
@@ -44,3 +44,8 @@ Body
     "id":2,
     "password":"1234"
 }
+
+
+
+
+:::::::::Para bloquear um cartão:::::::::
