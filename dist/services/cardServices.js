@@ -42,7 +42,6 @@ import Cryptr from "cryptr";
 import dayjs from "dayjs";
 import * as cardUtils from "../utils/cardUtils.js";
 import * as rechargeRepository from "../repositories/rechargeRepository.js";
-import bcrypt from "bcrypt";
 import * as businessRepository from "../repositories/businessRepository.js";
 import * as cardServices from "../services/cardServices.js";
 var cryptr = new Cryptr(process.env.SECRET);
@@ -252,7 +251,7 @@ export function rechargeCard(id, amount) {
 }
 export function registerPayment(id, password, businessId, amount) {
     return __awaiter(this, void 0, void 0, function () {
-        var card, cardIsBlocked, encryptedPassword, business;
+        var card, cardIsBlocked, business;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0: return [4 /*yield*/, cardUtils.checkForCardExistance(id)];
@@ -261,7 +260,6 @@ export function registerPayment(id, password, businessId, amount) {
                     return [4 /*yield*/, cardUtils.checkIfCardIsBlocked(card)];
                 case 2:
                     cardIsBlocked = _a.sent();
-                    encryptedPassword = bcrypt.hashSync(password, 10);
                     if (cardIsBlocked === true) {
                         throw {
                             type: 'Invalid requisition',
@@ -271,7 +269,7 @@ export function registerPayment(id, password, businessId, amount) {
                     return [4 /*yield*/, cardUtils.checkForCardExpirationDate(card.expirationDate)];
                 case 3:
                     _a.sent();
-                    return [4 /*yield*/, cardUtils.checkForPasswordMatch(id, encryptedPassword)];
+                    return [4 /*yield*/, cardUtils.checkForPasswordMatch(id, password)];
                 case 4:
                     _a.sent();
                     return [4 /*yield*/, checkIfBusinessExists(businessId)];

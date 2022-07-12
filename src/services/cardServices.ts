@@ -141,7 +141,6 @@ export async function rechargeCard(id : number, amount : number) {
 export async function registerPayment(id : number, password : string, businessId : number, amount : number) {
   const card = await cardUtils.checkForCardExistance(id);
   const cardIsBlocked = await cardUtils.checkIfCardIsBlocked(card);
-  const encryptedPassword = bcrypt.hashSync(password, 10);
   if (cardIsBlocked === true){
     throw {
       type: 'Invalid requisition',
@@ -149,7 +148,7 @@ export async function registerPayment(id : number, password : string, businessId
     }
   }
   await cardUtils.checkForCardExpirationDate(card.expirationDate);
-  await cardUtils.checkForPasswordMatch(id, encryptedPassword);
+  await cardUtils.checkForPasswordMatch(id, password);
   const business = await checkIfBusinessExists(businessId);
   await checkIfBusinessTypeMatches(business.type, card.type);
   await verifyIfCreditIsValid(id, amount);

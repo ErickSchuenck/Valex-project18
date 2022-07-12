@@ -96,7 +96,7 @@ Exemplo de envio:
 
 Body
 {
-    "id": 1,
+    "id": 1,          <=============== id do cartão
     "amount": 300
 }
 
@@ -111,10 +111,10 @@ Exemplo de envio:
 
 Body
 {
-    "id": 1,
+    "id": 1,       <=============== id do cartão
     "password":"1234",
-    "businessId":1
-    "amount": 300,
+    "businessId":1,
+    "amount": 300
 }
 
 
