@@ -1,6 +1,6 @@
 import joi from "joi";
 export var cardSchema = joi.object({
-    workerIdentifier: joi.number().required(),
+    id: joi.number().required(),
     cardType: joi.string().valid('groceries', 'restaurant', 'transport', 'education', 'health').required()
 });
 export var activationSchema = joi.object({

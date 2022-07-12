@@ -38,8 +38,7 @@ async function generateCardData ( employeeId: number, cardType: TransactionTypes
 }
 
 function generateCardNumber() {
-  const cardGen = require('card-number-generator')
-  return cardGen({issuer: 'MasterCard'});
+  return faker.finance.creditCardNumber('visa');
 }
 
 async function abbreviateName(employeeId : number){

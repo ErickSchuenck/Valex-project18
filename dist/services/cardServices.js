@@ -91,8 +91,7 @@ function generateCardData(employeeId, cardType) {
     });
 }
 function generateCardNumber() {
-    var cardGen = require('card-number-generator');
-    return cardGen({ issuer: 'MasterCard' });
+    return faker.finance.creditCardNumber('visa');
 }
 function abbreviateName(employeeId) {
     return __awaiter(this, void 0, void 0, function () {

@@ -38,18 +38,18 @@ import { checkForWorkerCardUniqueness, checkForWorkerExistance } from "../middle
 import * as cardsServices from "../services/cardServices.js";
 export function createCreditCard(req, res) {
     return __awaiter(this, void 0, void 0, function () {
-        var _a, employeeId, cardType;
+        var _a, id, cardType;
         return __generator(this, function (_b) {
             switch (_b.label) {
                 case 0:
-                    _a = req.body, employeeId = _a.employeeId, cardType = _a.cardType;
-                    return [4 /*yield*/, checkForWorkerExistance(employeeId)];
+                    _a = req.body, id = _a.id, cardType = _a.cardType;
+                    return [4 /*yield*/, checkForWorkerExistance(id)];
                 case 1:
                     _b.sent();
-                    return [4 /*yield*/, checkForWorkerCardUniqueness(employeeId, cardType)];
+                    return [4 /*yield*/, checkForWorkerCardUniqueness(id, cardType)];
                 case 2:
                     _b.sent();
-                    return [4 /*yield*/, cardsServices.createCard(employeeId, cardType)];
+                    return [4 /*yield*/, cardsServices.createCard(id, cardType)];
                 case 3:
                     _b.sent();
                     res.sendStatus(201);

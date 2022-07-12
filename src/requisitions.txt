@@ -9,7 +9,7 @@ x-api-key
 zadKLNx.DzvOVjQH01TumGl2urPjPQSxUbf67vs0
 
 {
-    "workerIdentifier": 1,
+    "id": 1,
     "cardType": "transport"
 }
 

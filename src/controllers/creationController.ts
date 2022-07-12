@@ -5,12 +5,12 @@ import * as cardsServices from "../services/cardServices.js"
 
 
 export async function createCreditCard(req: Request, res: Response) {
-  const {employeeId, cardType} : {
-    employeeId: number, 
+  const {id, cardType} : {
+    id: number, 
     cardType: TransactionTypes
   } = req.body;
-  await checkForWorkerExistance(employeeId);
-  await checkForWorkerCardUniqueness(employeeId, cardType);
-  await cardsServices.createCard(employeeId, cardType);
+  await checkForWorkerExistance(id);
+  await checkForWorkerCardUniqueness(id, cardType);
+  await cardsServices.createCard(id, cardType);
   res.sendStatus(201);
 }
