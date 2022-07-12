@@ -19,7 +19,8 @@ export async function blockCard(req: Request, res: Response) {
   const cardIsBlocked = await checkIfCardIsBlocked(card);
   if (cardIsBlocked) {
     throw {
-      type: "invalid requisition", 
+      status: 401,
+      type: "Unathorized", 
       message: "this card is already blocked" 
     }
   }
@@ -35,7 +36,8 @@ export async function unblockCard(req: Request, res: Response) {
   const cardIsBlocked = await checkIfCardIsBlocked(card);
   if (!cardIsBlocked) {
     throw {
-      type: "invalid requisition", 
+      status: 401,
+      type: "Unathorized", 
       message: "this card is not blocked" 
     }
   }

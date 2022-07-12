@@ -21,7 +21,8 @@ export async function checkForApiKeyExistance(req : Request, res : Response, nex
   const verification = await findByApiKey(key);
   if (!verification){
     throw { 
-      type: "not_found", 
+      status: 404,
+      type: "Not Found", 
       message: "Api key not found in database" 
     }
   }
@@ -32,7 +33,8 @@ export async function checkForWorkerExistance(employeeId : number){
   const verification = await findById(employeeId)
   if (!verification){
     throw { 
-      type: "unprocessable_entity", 
+      status: 404,
+      type: "Not Found",
       message: "Worker not found in database" 
     }
   }
@@ -42,7 +44,8 @@ export async function checkForWorkerCardUniqueness(employeeId : number, cardType
   const result = await findByTypeAndEmployeeId(cardType, employeeId)
   if (result) {
     throw { 
-      type: "card_redundancy", 
+      status: 409,
+      type: "Conflict", 
       message: "This card is already registered" 
     }
   }
