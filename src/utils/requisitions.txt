@@ -1,0 +1,46 @@
+:::::::::Para criar um cartão::::::::::
+enviar req POST para
+/createCreditCard
+
+necessário headers.
+Exemplo de Headers:
+
+x-api-key
+zadKLNx.DzvOVjQH01TumGl2urPjPQSxUbf67vs0
+
+{
+    "workerIdentifier": 1,
+    "cardType": "transport"
+}
+
+
+
+
+:::::::::Para ativar um cartão:::::::::
+enviar req POST para
+/activateCreditCard
+
+Exemplo de envio:
+
+Body
+{
+	"id":1,
+	"securityCode": "123",
+	"password":"1234"
+}
+
+
+
+
+:::::::::Para ativar um cartão:::::::::
+
+enviar req GET para
+/balance
+
+Exemplo de envio:
+
+Body
+{
+    "id":2,
+    "password":"1234"
+}

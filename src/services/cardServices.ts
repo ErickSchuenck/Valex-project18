@@ -2,9 +2,11 @@ import { TransactionTypes } from "../repositories/cardRepository";
 import { faker } from '@faker-js/faker';
 import * as cardRepository from "../repositories/cardRepository.js"
 import * as employeeRepository from "../repositories/employeeRepository.js"
+import * as paymentRepository from "../repositories/paymentRepository.js"
 import Cryptr from "cryptr"
 import dayjs from "dayjs";
 import * as cardUtils from "../utils/cardUtils.js"
+import * as rechargeRepositoriy from "../repositories/rechargeRepository"
 import bcrypt from "bcrypt"
 
 const cryptr = new Cryptr(process.env.SECRET);
@@ -85,4 +87,29 @@ async function checkForCardCVC(inputCVC :string, databaseCVC: string){
       message: 'CVC does not match with database, please double check the input'
     }
   }
+}
+
+export async function getCardBalance(id : number, password : string){
+  await cardUtils.checkForCardExistance(id);
+  const losses = await paymentRepository.findByCardId(id);
+  const profit = await rechargeRepositoriy.findByCardId(id)
+  const balance = await generateBalance(losses, profit)
+  return {balance, losses, profit}
+}
+
+function generateBalance(losses : any, profit : any){
+  /// FIXMEEEEE!!!! Algum jeito de declarar array com o typescript sem saber o conteúdo do array?
+
+  let totalPayment = 0;
+  let totalCredits = 0;
+
+  losses.forEach(payment => {
+    totalPayment = totalPayment + payment.amount ;
+  });
+
+  profit.forEach(credit => {
+    totalCredits = totalCredits + credit.amount ;
+  });
+
+  return totalCredits - totalPayment;
 }

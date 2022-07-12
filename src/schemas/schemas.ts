@@ -6,7 +6,12 @@ export const cardSchema = joi.object({
 })
 
 export const activationSchema = joi.object({
-  cardId: joi.number().required(),
+  id: joi.number().required(),
   securityCode: joi.string().pattern(/[0-9]$/).length(3).required(),
+  password: joi.string().pattern(/[0-9]$/).length(4).required()
+})
+
+export const balanceSchema = joi.object({
+  id: joi.number().required(),
   password: joi.string().pattern(/[0-9]$/).length(4).required()
 })
