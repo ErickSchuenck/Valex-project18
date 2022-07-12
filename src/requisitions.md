@@ -113,7 +113,7 @@ Body
 {
     "id": 1,       <=============== id do cartão
     "password":"1234",
-    "businessId":1,
+    "businessId":1,  <=============== lembre de respeitar o tipo do negócio e sua compactibilidade com o cartão
     "amount": 300
 }
 
