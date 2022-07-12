@@ -1,11 +1,10 @@
-import {Request, Response, NextFunction} from "express";
+import { NextFunction, Request, Response  } from "express";
 
-
-export default function errorHandler (error, req: Request, res: Response, next: NextFunction) {
-  console.log(error);
-  if (error.response) {
-    return res.sendStatus(error.response.status);
-  }
-
-  res.sendStatus(500); // internal server error
-}
+export default function errorHandler(error: {status: number, type: string, message: string}, req : Request, res : Response, next: NextFunction){
+    console.log(error)
+    if(!error.status || !error.message){
+        console.log(error);
+        return res.status(500).send("Internal Server Error");
+    };
+    return res.status(error.status).send(error.message);
+};

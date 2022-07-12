@@ -1,7 +1,10 @@
 export default function errorHandler(error, req, res, next) {
     console.log(error);
-    if (error.response) {
-        return res.sendStatus(error.response.status);
+    if (!error.status || !error.message) {
+        console.log(error);
+        return res.status(500).send("Internal Server Error");
     }
-    res.sendStatus(500); // internal server error
+    ;
+    return res.status(error.status).send(error.message);
 }
+;
