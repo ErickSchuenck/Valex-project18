@@ -17,6 +17,5 @@ app.use(errorHandler);
 
 const port = +process.env.PORT || 5000;
 app.listen(port, () => {
-  console.log('hello', dayjs())
   console.log(`Server up and running on port ${port}`);
 });
