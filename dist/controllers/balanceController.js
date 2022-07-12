@@ -36,16 +36,14 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 import * as cardServices from "../services/cardServices.js";
 import * as cardUtils from "../utils/cardUtils.js";
-import bcrypt from "bcrypt";
 export function getCardBalance(req, res) {
     return __awaiter(this, void 0, void 0, function () {
-        var _a, id, password, encryptedPassword, balance;
+        var _a, id, password, balance;
         return __generator(this, function (_b) {
             switch (_b.label) {
                 case 0:
                     _a = req.body, id = _a.id, password = _a.password;
-                    encryptedPassword = bcrypt.hashSync(password, 10);
-                    return [4 /*yield*/, cardUtils.checkForPasswordMatch(id, encryptedPassword)];
+                    return [4 /*yield*/, cardUtils.checkForPasswordMatch(id, password)];
                 case 1:
                     _b.sent();
                     return [4 /*yield*/, cardServices.getCardBalance(id, password)];

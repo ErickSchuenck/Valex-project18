@@ -17,7 +17,8 @@ export const verificationSchema = joi.object({
 })
 
 export const rechargeSchema = joi.object({
-    amount: joi.number().integer().min(1).required()
+  id: joi.number().required(),
+  amount: joi.number().integer().min(1).required()
 });
 
 export const paymentSchema = joi.object({

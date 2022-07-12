@@ -36,6 +36,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 import dayjs from "dayjs";
 import * as cardRepository from "../repositories/cardRepository.js";
+import * as cardsServices from "../services/cardServices.js";
 export function checkForCardExistance(id) {
     return __awaiter(this, void 0, void 0, function () {
         var card;
@@ -70,15 +71,16 @@ export function checkForCardExpirationDate(expirationDate) {
         });
     });
 }
-export function checkForPasswordMatch(id, encryptedPassword) {
+export function checkForPasswordMatch(id, password) {
     return __awaiter(this, void 0, void 0, function () {
-        var passwordInDatabase;
+        var passwordInDatabase, decryptedDatabasePassword;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0: return [4 /*yield*/, cardRepository.findById(id)];
                 case 1:
                     passwordInDatabase = (_a.sent()).password;
-                    if (encryptedPassword !== passwordInDatabase) {
+                    decryptedDatabasePassword = cardsServices.decrypt(passwordInDatabase);
+                    if (password !== decryptedDatabasePassword) {
                         throw {
                             type: "invalid requisition",
                             message: "password incorrect, please double check the input"

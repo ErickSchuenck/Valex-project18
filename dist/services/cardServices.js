@@ -44,6 +44,7 @@ import * as cardUtils from "../utils/cardUtils.js";
 import * as rechargeRepository from "../repositories/rechargeRepository.js";
 import bcrypt from "bcrypt";
 import * as businessRepository from "../repositories/businessRepository.js";
+import * as cardServices from "../services/cardServices.js";
 var cryptr = new Cryptr(process.env.SECRET);
 export function createCard(employeeId, cardType) {
     return __awaiter(this, void 0, void 0, function () {
@@ -56,7 +57,7 @@ export function createCard(employeeId, cardType) {
                     return [4 /*yield*/, cardRepository.insert(cardData)];
                 case 2:
                     _a.sent();
-                    return [2 /*return*/];
+                    return [2 /*return*/, cardData];
             }
         });
     });
@@ -144,7 +145,7 @@ export function activateCard(id, securityCode, password) {
                     return [4 /*yield*/, checkForCardCVC(card.securityCode, securityCode)];
                 case 3:
                     _a.sent();
-                    encryptedPassword = bcrypt.hashSync(password, 10);
+                    encryptedPassword = cardServices.encrypt(password);
                     return [4 /*yield*/, cardRepository.update(id, { password: encryptedPassword, isBlocked: false })];
                 case 4:
                     _a.sent();
@@ -345,4 +346,10 @@ function checkIfBalanceCoversAmount(amount, balance) {
             message: "this card does not have enough credits to perform this transaction"
         };
     }
+}
+export function encrypt(password) {
+    return cryptr.encrypt(password);
+}
+export function decrypt(password) {
+    return cryptr.decrypt(password);
 }

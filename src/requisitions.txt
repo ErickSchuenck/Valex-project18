@@ -9,9 +9,12 @@ x-api-key
 zadKLNx.DzvOVjQH01TumGl2urPjPQSxUbf67vs0
 
 {
-    "id": 1,
+    "id": 1,         <=============== id do usuário dono do cartão
     "cardType": "transport"
 }
+ATENÇÃO: Você receberá o cvc do cartão como uma resposta da api.
+É o único momento que a aplicação enviará ele decriptado, use para as
+próximas requisições
 
 
 
@@ -24,8 +27,8 @@ Exemplo de envio:
 
 Body
 {
-	"id":1,
-	"securityCode": "123",
+	"id":1,    <=============== id do cartão
+	"securityCode": "589",  <============== Use o cvc que foi recebido na req de criar cartão
 	"password":"1234"
 }
 
@@ -41,7 +44,7 @@ Exemplo de envio:
 
 Body
 {
-    "id":2,
+    "id":2,               <=============== id do cartão
     "password":"1234"
 }
 
@@ -56,7 +59,7 @@ Exemplo de envio:
 
 Body
 {
-    "id":2,
+    "id":2,          <=============== id do cartão
     "password":"1234"
 }
 
@@ -71,7 +74,7 @@ Exemplo de envio:
 
 Body
 {
-    "id":2,
+    "id":2,          <=============== id do cartão
     "password":"1234"
 }
 
@@ -94,7 +97,7 @@ Exemplo de envio:
 Body
 {
     "id": 1,
-    "amount": 300,
+    "amount": 300
 }
 
 
@@ -113,3 +116,10 @@ Body
     "businessId":1
     "amount": 300,
 }
+
+
+::::::::::::::::::::::::::::ARQUIVO ENV::::::::::::::::::::::::::::
+
+DATABASE_URL=postgres://xwyrrynbzqdiwu:a4ac01cbb3f0bbd76bd28e758ddd5249ab1e4252b82ce755bad38f46a15aca7c@ec2-54-159-22-90.compute-1.amazonaws.com:5432/d83n88dtr9stif
+PORT = 5000
+SECRET = 'ChaveSecreta'

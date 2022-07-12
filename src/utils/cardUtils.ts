@@ -1,5 +1,7 @@
+import chalk from "chalk"
 import dayjs from "dayjs"
 import * as cardRepository from "../repositories/cardRepository.js"
+import * as cardsServices from "../services/cardServices.js"
 
 export async function checkForCardExistance(id : number) {
   const card = await cardRepository.findById(id)
@@ -22,9 +24,10 @@ export async function checkForCardExpirationDate(expirationDate: string){
     }
 }
 
-export async function checkForPasswordMatch(id : number, encryptedPassword : string) {
+export async function checkForPasswordMatch(id : number, password : string) {
   const passwordInDatabase = (await cardRepository.findById(id)).password;
-  if (encryptedPassword !== passwordInDatabase){
+  const decryptedDatabasePassword = cardsServices.decrypt(passwordInDatabase);
+  if (password !== decryptedDatabasePassword){
     throw {
       type: "invalid requisition", 
       message: "password incorrect, please double check the input"

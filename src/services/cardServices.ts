@@ -9,6 +9,7 @@ import * as cardUtils from "../utils/cardUtils.js"
 import * as rechargeRepository from "../repositories/rechargeRepository.js"
 import bcrypt from "bcrypt"
 import * as businessRepository from "../repositories/businessRepository.js"
+import * as cardServices from "../services/cardServices.js"
 
 const cryptr = new Cryptr(process.env.SECRET);
 
@@ -76,7 +77,7 @@ export async function activateCard(id : number, securityCode : string, password 
   }
   await cardUtils.checkForCardExpirationDate(card.expirationDate);
   await checkForCardCVC(card.securityCode, securityCode);
-  const encryptedPassword = bcrypt.hashSync(password, 10);
+  const encryptedPassword = cardServices.encrypt(password)
   await cardRepository.update(id, {password: encryptedPassword, isBlocked: false})
 }
 
@@ -189,4 +190,12 @@ function checkIfBalanceCoversAmount(amount: number, balance : number){
         message: "this card does not have enough credits to perform this transaction" 
       }
     }
+}
+
+export function encrypt(password : string){
+  return cryptr.encrypt(password)
+}
+
+export function decrypt(password : string){
+  return cryptr.decrypt(password)
 }

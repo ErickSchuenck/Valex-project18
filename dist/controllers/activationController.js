@@ -36,7 +36,6 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 import * as cardsServices from "../services/cardServices.js";
 import { checkForCardExistance, checkForCardExpirationDate, checkForPasswordMatch, checkIfCardIsBlocked } from "../utils/cardUtils.js";
-import bcrypt from "bcrypt";
 export function activateCard(req, res) {
     return __awaiter(this, void 0, void 0, function () {
         var _a, id, securityCode, password;
@@ -55,16 +54,15 @@ export function activateCard(req, res) {
 }
 export function blockCard(req, res) {
     return __awaiter(this, void 0, void 0, function () {
-        var _a, id, password, encryptedPassword, card, cardIsBlocked;
+        var _a, id, password, card, cardIsBlocked;
         return __generator(this, function (_b) {
             switch (_b.label) {
                 case 0:
                     _a = req.body, id = _a.id, password = _a.password;
-                    encryptedPassword = bcrypt.hashSync(password, 10);
                     return [4 /*yield*/, checkForCardExistance(id)];
                 case 1:
                     card = _b.sent();
-                    return [4 /*yield*/, checkForPasswordMatch(id, encryptedPassword)];
+                    return [4 /*yield*/, checkForPasswordMatch(id, password)];
                 case 2:
                     _b.sent();
                     return [4 /*yield*/, checkForCardExpirationDate(card.expirationDate)];
@@ -90,16 +88,15 @@ export function blockCard(req, res) {
 }
 export function unblockCard(req, res) {
     return __awaiter(this, void 0, void 0, function () {
-        var _a, id, password, encryptedPassword, card, cardIsBlocked;
+        var _a, id, password, card, cardIsBlocked;
         return __generator(this, function (_b) {
             switch (_b.label) {
                 case 0:
                     _a = req.body, id = _a.id, password = _a.password;
-                    encryptedPassword = bcrypt.hashSync(password, 10);
                     return [4 /*yield*/, checkForCardExistance(id)];
                 case 1:
                     card = _b.sent();
-                    return [4 /*yield*/, checkForPasswordMatch(id, encryptedPassword)];
+                    return [4 /*yield*/, checkForPasswordMatch(id, password)];
                 case 2:
                     _b.sent();
                     return [4 /*yield*/, checkForCardExpirationDate(card.expirationDate)];

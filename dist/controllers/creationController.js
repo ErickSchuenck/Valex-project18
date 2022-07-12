@@ -34,11 +34,13 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+import Cryptr from "cryptr";
 import { checkForWorkerCardUniqueness, checkForWorkerExistance } from "../middlewares/registerCardMiddleware.js";
 import * as cardsServices from "../services/cardServices.js";
+var cryptr = new Cryptr(process.env.SECRET);
 export function createCreditCard(req, res) {
     return __awaiter(this, void 0, void 0, function () {
-        var _a, id, cardType;
+        var _a, id, cardType, data, cvc;
         return __generator(this, function (_b) {
             switch (_b.label) {
                 case 0:
@@ -51,8 +53,9 @@ export function createCreditCard(req, res) {
                     _b.sent();
                     return [4 /*yield*/, cardsServices.createCard(id, cardType)];
                 case 3:
-                    _b.sent();
-                    res.sendStatus(201);
+                    data = _b.sent();
+                    cvc = cryptr.decrypt(data.securityCode);
+                    res.status(201).send("Your card was created! Here is your cvc: ".concat(cvc));
                     return [2 /*return*/];
             }
         });

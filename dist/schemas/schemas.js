@@ -13,6 +13,7 @@ export var verificationSchema = joi.object({
     password: joi.string().pattern(/[0-9]$/).length(4).required()
 });
 export var rechargeSchema = joi.object({
+    id: joi.number().required(),
     amount: joi.number().integer().min(1).required()
 });
 export var paymentSchema = joi.object({

@@ -1,8 +1,7 @@
-import chalk from "chalk";
 import { Request, Response } from "express";
 import * as cardsServices from "../services/cardServices.js"
 import { checkForCardExistance, checkForCardExpirationDate, checkForPasswordMatch, checkIfCardIsBlocked } from "../utils/cardUtils.js";
-import bcrypt from "bcrypt"
+
 
 
 export async function activateCard(req: Request, res: Response) {
@@ -14,9 +13,8 @@ export async function activateCard(req: Request, res: Response) {
 
 export async function blockCard(req: Request, res: Response) {
   const {id, password} = req.body;
-  const encryptedPassword = bcrypt.hashSync(password, 10);
   const card = await checkForCardExistance(id);
-  await checkForPasswordMatch(id, encryptedPassword);
+  await checkForPasswordMatch(id, password);
   await checkForCardExpirationDate(card.expirationDate);
   const cardIsBlocked = await checkIfCardIsBlocked(card);
   if (cardIsBlocked) {
@@ -31,9 +29,8 @@ export async function blockCard(req: Request, res: Response) {
 
 export async function unblockCard(req: Request, res: Response) {
   const {id, password} = req.body;
-  const encryptedPassword = bcrypt.hashSync(password, 10);
   const card = await checkForCardExistance(id);
-  await checkForPasswordMatch(id, encryptedPassword);
+  await checkForPasswordMatch(id, password);
   await checkForCardExpirationDate(card.expirationDate);
   const cardIsBlocked = await checkIfCardIsBlocked(card);
   if (!cardIsBlocked) {
