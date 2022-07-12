@@ -48,11 +48,9 @@ export function findByCardId(cardId) {
         });
     });
 }
-export function insert(paymentData) {
+export function insert(cardId, businessId, amount) {
     return __awaiter(this, void 0, void 0, function () {
-        var cardId, businessId, amount;
         return __generator(this, function (_a) {
-            cardId = paymentData.cardId, businessId = paymentData.businessId, amount = paymentData.amount;
             connection.query("INSERT INTO payments (\"cardId\", \"businessId\", amount) VALUES ($1, $2, $3)", [cardId, businessId, amount]);
             return [2 /*return*/];
         });

@@ -41,8 +41,9 @@ import * as paymentRepository from "../repositories/paymentRepository.js";
 import Cryptr from "cryptr";
 import dayjs from "dayjs";
 import * as cardUtils from "../utils/cardUtils.js";
-import * as rechargeRepositoriy from "../repositories/rechargeRepository";
+import * as rechargeRepository from "../repositories/rechargeRepository.js";
 import bcrypt from "bcrypt";
+import * as businessRepository from "../repositories/businessRepository.js";
 var cryptr = new Cryptr(process.env.SECRET);
 export function createCard(employeeId, cardType) {
     return __awaiter(this, void 0, void 0, function () {
@@ -179,12 +180,10 @@ export function getCardBalance(id, password) {
                     return [4 /*yield*/, paymentRepository.findByCardId(id)];
                 case 2:
                     transactions = _a.sent();
-                    return [4 /*yield*/, rechargeRepositoriy.findByCardId(id)];
+                    return [4 /*yield*/, rechargeRepository.findByCardId(id)];
                 case 3:
                     recharges = _a.sent();
-                    return [4 /*yield*/, generateBalance(transactions, recharges)];
-                case 4:
-                    balance = _a.sent();
+                    balance = generateBalance(transactions, recharges);
                     return [2 /*return*/, { balance: balance, transactions: transactions, recharges: recharges }];
             }
         });
@@ -222,4 +221,129 @@ export function blockOrUnblockCard(id, action) {
             }
         });
     });
+}
+export function rechargeCard(id, amount) {
+    return __awaiter(this, void 0, void 0, function () {
+        var card, cardIsBlocked;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, cardUtils.checkForCardExistance(id)];
+                case 1:
+                    card = _a.sent();
+                    return [4 /*yield*/, cardUtils.checkIfCardIsBlocked(card)];
+                case 2:
+                    cardIsBlocked = _a.sent();
+                    if (cardIsBlocked === true) {
+                        throw {
+                            type: 'Invalid requisition',
+                            message: 'This card is blocked'
+                        };
+                    }
+                    return [4 /*yield*/, cardUtils.checkForCardExpirationDate(card.expirationDate)];
+                case 3:
+                    _a.sent();
+                    return [4 /*yield*/, rechargeRepository.insert(id, amount)];
+                case 4:
+                    _a.sent();
+                    return [2 /*return*/];
+            }
+        });
+    });
+}
+export function registerPayment(id, password, businessId, amount) {
+    return __awaiter(this, void 0, void 0, function () {
+        var card, cardIsBlocked, encryptedPassword, business;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, cardUtils.checkForCardExistance(id)];
+                case 1:
+                    card = _a.sent();
+                    return [4 /*yield*/, cardUtils.checkIfCardIsBlocked(card)];
+                case 2:
+                    cardIsBlocked = _a.sent();
+                    encryptedPassword = bcrypt.hashSync(password, 10);
+                    if (cardIsBlocked === true) {
+                        throw {
+                            type: 'Invalid requisition',
+                            message: 'This card is blocked'
+                        };
+                    }
+                    return [4 /*yield*/, cardUtils.checkForCardExpirationDate(card.expirationDate)];
+                case 3:
+                    _a.sent();
+                    return [4 /*yield*/, cardUtils.checkForPasswordMatch(id, encryptedPassword)];
+                case 4:
+                    _a.sent();
+                    return [4 /*yield*/, checkIfBusinessExists(businessId)];
+                case 5:
+                    business = _a.sent();
+                    return [4 /*yield*/, checkIfBusinessTypeMatches(business.type, card.type)];
+                case 6:
+                    _a.sent();
+                    return [4 /*yield*/, verifyIfCreditIsValid(id, amount)];
+                case 7:
+                    _a.sent();
+                    paymentRepository.insert(id, businessId, amount);
+                    return [2 /*return*/];
+            }
+        });
+    });
+}
+function checkIfBusinessExists(businessId) {
+    return __awaiter(this, void 0, void 0, function () {
+        var business;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, businessRepository.findById(businessId)];
+                case 1:
+                    business = _a.sent();
+                    if (!business) {
+                        throw {
+                            type: "Invalid requisition",
+                            message: "This business does not exists"
+                        };
+                    }
+                    return [2 /*return*/, business];
+            }
+        });
+    });
+}
+function checkIfBusinessTypeMatches(businessType, cardType) {
+    return __awaiter(this, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            if (businessType !== cardType) {
+                throw {
+                    type: "conflict",
+                    message: "this company type differs from your card type"
+                };
+            }
+            return [2 /*return*/];
+        });
+    });
+}
+function verifyIfCreditIsValid(id, amount) {
+    return __awaiter(this, void 0, void 0, function () {
+        var transactions, recharges, balance;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, paymentRepository.findByCardId(id)];
+                case 1:
+                    transactions = _a.sent();
+                    return [4 /*yield*/, rechargeRepository.findByCardId(id)];
+                case 2:
+                    recharges = _a.sent();
+                    balance = generateBalance(transactions, recharges);
+                    checkIfBalanceCoversAmount(amount, balance);
+                    return [2 /*return*/];
+            }
+        });
+    });
+}
+function checkIfBalanceCoversAmount(amount, balance) {
+    if (amount > balance) {
+        throw {
+            type: "unauthorized",
+            message: "this card does not have enough credits to perform this transaction"
+        };
+    }
 }

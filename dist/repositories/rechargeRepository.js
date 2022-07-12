@@ -48,11 +48,9 @@ export function findByCardId(cardId) {
         });
     });
 }
-export function insert(rechargeData) {
+export function insert(cardId, amount) {
     return __awaiter(this, void 0, void 0, function () {
-        var cardId, amount;
         return __generator(this, function (_a) {
-            cardId = rechargeData.cardId, amount = rechargeData.amount;
             connection.query("INSERT INTO recharges (\"cardId\", amount) VALUES ($1, $2)", [cardId, amount]);
             return [2 /*return*/];
         });

@@ -34,7 +34,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-import * as cardsServices from "../services/cardServices.js";
+import * as cardServices from "../services/cardServices.js";
 import * as cardUtils from "../utils/cardUtils.js";
 import bcrypt from "bcrypt";
 export function getCardBalance(req, res) {
@@ -48,10 +48,42 @@ export function getCardBalance(req, res) {
                     return [4 /*yield*/, cardUtils.checkForPasswordMatch(id, encryptedPassword)];
                 case 1:
                     _b.sent();
-                    return [4 /*yield*/, cardsServices.getCardBalance(id, password)];
+                    return [4 /*yield*/, cardServices.getCardBalance(id, password)];
                 case 2:
                     balance = _b.sent();
                     return [2 /*return*/, res.status(200).send(balance)];
+            }
+        });
+    });
+}
+export function rechargeCard(req, res) {
+    return __awaiter(this, void 0, void 0, function () {
+        var _a, id, amount;
+        return __generator(this, function (_b) {
+            switch (_b.label) {
+                case 0:
+                    _a = req.body, id = _a.id, amount = _a.amount;
+                    return [4 /*yield*/, cardServices.rechargeCard(id, amount)];
+                case 1:
+                    _b.sent();
+                    res.sendStatus(200);
+                    return [2 /*return*/];
+            }
+        });
+    });
+}
+export function registerPayment(req, res) {
+    return __awaiter(this, void 0, void 0, function () {
+        var _a, id, password, businessId, amount;
+        return __generator(this, function (_b) {
+            switch (_b.label) {
+                case 0:
+                    _a = req.body, id = _a.id, password = _a.password, businessId = _a.businessId, amount = _a.amount;
+                    return [4 /*yield*/, cardServices.registerPayment(id, password, businessId, amount)];
+                case 1:
+                    _b.sent();
+                    res.sendStatus(200);
+                    return [2 /*return*/];
             }
         });
     });
