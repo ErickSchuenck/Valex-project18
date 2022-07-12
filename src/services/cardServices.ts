@@ -114,6 +114,11 @@ function generateBalance(transactions : any, recharges : any){
   return totalCredits - totalPayment;
 }
 
-export async function blockCard(id: number){
-  await cardRepository.update(id, { isBlocked: true});
+export async function blockOrUnblockCard(id: number, action: 'block' | 'unblock'){
+  if (action === 'block'){
+    await cardRepository.update(id, { isBlocked: true});
+  }
+  if (action === 'unblock'){
+    await cardRepository.update(id, { isBlocked: false});
+  }
 }

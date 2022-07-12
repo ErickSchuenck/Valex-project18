@@ -59,3 +59,31 @@ Body
     "id":2,
     "password":"1234"
 }
+
+
+
+
+:::::::::Para desbloquear um cartão:::::::::
+enviar req POST para
+/unblock
+
+Exemplo de envio:
+
+Body
+{
+    "id":2,
+    "password":"1234"
+}
+
+:::::::::Para recarregar um cartão:::::::::
+enviar req POST para
+/recharge
+
+Exemplo de envio:
+
+Body
+{
+    "id": 1,
+    "timestamp":,
+    "amount": 300,
+}

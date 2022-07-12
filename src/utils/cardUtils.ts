@@ -33,10 +33,5 @@ export async function checkForPasswordMatch(id : number, encryptedPassword : str
 }
 
 export async function checkIfCardIsBlocked(card : any) {
-  if (card.isBlocked === true){
-    throw {
-      type: "invalid requisition", 
-      message: "this card is already blocked" 
-    }
-  }
+  return card.isBlocked
 }

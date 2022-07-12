@@ -1,6 +1,5 @@
 import chalk from 'chalk';
 import { Request, Response, NextFunction } from "express";
-import {cardSchema} from '../schemas/schemas.js'
 import {findByApiKey } from '../repositories/companyRepository.js'
 import {findById} from '../repositories/employeeRepository.js'
 import { findByTypeAndEmployeeId, TransactionTypes } from '../repositories/cardRepository.js';
@@ -18,11 +17,8 @@ export function validateSchema(schema: any) {
 };
 
 export async function checkForApiKeyExistance(req : Request, res : Response, next : NextFunction ){
-  console.log(chalk.blue(2))
   const key : string = req.headers["x-api-key"].toString();
-  console.log(chalk.red(key))
   const verification = await findByApiKey(key);
-  console.log(chalk.red(verification))
   if (!verification){
     throw { 
       type: "not_found", 
