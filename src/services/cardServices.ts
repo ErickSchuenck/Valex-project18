@@ -91,23 +91,23 @@ async function checkForCardCVC(inputCVC :string, databaseCVC: string){
 
 export async function getCardBalance(id : number, password : string){
   await cardUtils.checkForCardExistance(id);
-  const losses = await paymentRepository.findByCardId(id);
-  const profit = await rechargeRepositoriy.findByCardId(id)
-  const balance = await generateBalance(losses, profit)
-  return {balance, losses, profit}
+  const transactions = await paymentRepository.findByCardId(id);
+  const recharges = await rechargeRepositoriy.findByCardId(id)
+  const balance = await generateBalance(transactions, recharges)
+  return {balance, transactions, recharges}
 }
 
-function generateBalance(losses : any, profit : any){
+function generateBalance(transactions : any, recharges : any){
   /// FIXMEEEEE!!!! Algum jeito de declarar array com o typescript sem saber o conteúdo do array?
 
   let totalPayment = 0;
   let totalCredits = 0;
 
-  losses.forEach(payment => {
+  transactions.forEach(payment => {
     totalPayment = totalPayment + payment.amount ;
   });
 
-  profit.forEach(credit => {
+  recharges.forEach(credit => {
     totalCredits = totalCredits + credit.amount ;
   });
 
