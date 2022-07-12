@@ -15,6 +15,7 @@ const cryptr = new Cryptr(process.env.SECRET);
 export async function createCard(employeeId: number, cardType: TransactionTypes) {
   const cardData = await generateCardData(employeeId, cardType);
   await cardRepository.insert(cardData);
+  return cardData;
 }
 
 async function generateCardData ( employeeId: number, cardType: TransactionTypes) {
