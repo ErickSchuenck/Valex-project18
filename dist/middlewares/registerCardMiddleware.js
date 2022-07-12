@@ -59,7 +59,8 @@ export function checkForApiKeyExistance(req, res, next) {
                     verification = _a.sent();
                     if (!verification) {
                         throw {
-                            type: "not_found",
+                            status: 404,
+                            type: "Not Found",
                             message: "Api key not found in database"
                         };
                     }
@@ -79,7 +80,8 @@ export function checkForWorkerExistance(employeeId) {
                     verification = _a.sent();
                     if (!verification) {
                         throw {
-                            type: "unprocessable_entity",
+                            status: 404,
+                            type: "Not Found",
                             message: "Worker not found in database"
                         };
                     }
@@ -98,7 +100,8 @@ export function checkForWorkerCardUniqueness(employeeId, cardType) {
                     result = _a.sent();
                     if (result) {
                         throw {
-                            type: "card_redundancy",
+                            status: 409,
+                            type: "Conflict",
                             message: "This card is already registered"
                         };
                     }

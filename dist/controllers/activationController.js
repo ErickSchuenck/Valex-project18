@@ -73,7 +73,8 @@ export function blockCard(req, res) {
                     cardIsBlocked = _b.sent();
                     if (cardIsBlocked) {
                         throw {
-                            type: "invalid requisition",
+                            status: 401,
+                            type: "Unathorized",
                             message: "this card is already blocked"
                         };
                     }
@@ -107,7 +108,8 @@ export function unblockCard(req, res) {
                     cardIsBlocked = _b.sent();
                     if (!cardIsBlocked) {
                         throw {
-                            type: "invalid requisition",
+                            status: 401,
+                            type: "Unathorized",
                             message: "this card is not blocked"
                         };
                     }

@@ -134,7 +134,8 @@ export function activateCard(id, securityCode, password) {
                     card = _a.sent();
                     if (!card.isBlocked) {
                         throw {
-                            type: 'Invalid requisition',
+                            status: 409,
+                            type: 'Conflict',
                             message: 'This card is already activated'
                         };
                     }
@@ -160,7 +161,8 @@ function checkForCardCVC(inputCVC, databaseCVC) {
             encriptedInputCVC = cryptr.decrypt(inputCVC);
             if (encriptedInputCVC !== databaseCVC) {
                 throw {
-                    type: 'Invalid requisition',
+                    status: 400,
+                    type: 'Bad Request',
                     message: 'CVC does not match with database, please double check the input'
                 };
             }
@@ -189,7 +191,6 @@ export function getCardBalance(id, password) {
     });
 }
 function generateBalance(transactions, recharges) {
-    /// FIXMEEEEE!!!! Algum jeito de declarar array com o typescript sem saber o conteúdo do array?
     var totalPayment = 0;
     var totalCredits = 0;
     transactions.forEach(function (payment) {
@@ -234,7 +235,8 @@ export function rechargeCard(id, amount) {
                     cardIsBlocked = _a.sent();
                     if (cardIsBlocked === true) {
                         throw {
-                            type: 'Invalid requisition',
+                            status: 400,
+                            type: 'Bad Request',
                             message: 'This card is blocked'
                         };
                     }
@@ -262,7 +264,8 @@ export function registerPayment(id, password, businessId, amount) {
                     cardIsBlocked = _a.sent();
                     if (cardIsBlocked === true) {
                         throw {
-                            type: 'Invalid requisition',
+                            status: 400,
+                            type: 'Bad Request',
                             message: 'This card is blocked'
                         };
                     }
@@ -297,7 +300,8 @@ function checkIfBusinessExists(businessId) {
                     business = _a.sent();
                     if (!business) {
                         throw {
-                            type: "Invalid requisition",
+                            status: 404,
+                            type: "Not Found",
                             message: "This business does not exists"
                         };
                     }
@@ -311,6 +315,7 @@ function checkIfBusinessTypeMatches(businessType, cardType) {
         return __generator(this, function (_a) {
             if (businessType !== cardType) {
                 throw {
+                    status: 409,
                     type: "conflict",
                     message: "this company type differs from your card type"
                 };
@@ -340,7 +345,8 @@ function verifyIfCreditIsValid(id, amount) {
 function checkIfBalanceCoversAmount(amount, balance) {
     if (amount > balance) {
         throw {
-            type: "unauthorized",
+            status: 401,
+            type: "Unauthorized",
             message: "this card does not have enough credits to perform this transaction"
         };
     }
