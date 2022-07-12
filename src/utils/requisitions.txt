@@ -49,3 +49,13 @@ Body
 
 
 :::::::::Para bloquear um cartão:::::::::
+enviar req POST para
+/block
+
+Exemplo de envio:
+
+Body
+{
+    "id":2,
+    "password":"1234"
+}

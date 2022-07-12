@@ -11,7 +11,7 @@ export const activationSchema = joi.object({
   password: joi.string().pattern(/[0-9]$/).length(4).required()
 })
 
-export const balanceSchema = joi.object({
+export const verificationSchema = joi.object({
   id: joi.number().required(),
   password: joi.string().pattern(/[0-9]$/).length(4).required()
 })

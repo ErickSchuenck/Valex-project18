@@ -1,9 +1,9 @@
 import { Router } from "express";
-import {validateSchema} from "../middlewares/registerCardMiddleware.js"
-import { balanceSchema } from "../schemas/schemas.js";
+import {validateSchema} from "../middlewares/cardMiddleware.js"
+import { verificationSchema } from "../schemas/schemas.js";
 import { getCardBalance } from "../controllers/balanceController.js";
 
-const activationRouter = Router();
-activationRouter.get("/balance", validateSchema(balanceSchema), getCardBalance);
+const balanceRouter = Router();
+balanceRouter.get("/balance", validateSchema(verificationSchema), getCardBalance);
 
-export default activationRouter;
+export default balanceRouter;

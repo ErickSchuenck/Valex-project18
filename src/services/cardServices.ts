@@ -113,3 +113,7 @@ function generateBalance(transactions : any, recharges : any){
 
   return totalCredits - totalPayment;
 }
+
+export async function blockCard(id: number){
+  await cardRepository.update(id, { isBlocked: true});
+}
